@@ -8,7 +8,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const multipliersOwnedDisplay = document.getElementById('multipliers-owned');
     const usernameInput = document.getElementById('username-input');
     const startGameButton = document.getElementById('start-game');
-    
+    const usernameContainer = document.getElementById('username-container');
+
+    // Initially hide game elements
+    gameContainer.style.display = 'none';
+
     // Load saved game state or set default values if none exist
     let score = parseFloat(localStorage.getItem('score')) || 0;
     let upgradesOwned = parseInt(localStorage.getItem('upgradesOwned'), 10) || 0;
@@ -17,30 +21,8 @@ document.addEventListener('DOMContentLoaded', function() {
     let multiplierCost = parseInt(localStorage.getItem('multiplierCost'), 10) || 20;
     let cookiesPerSecond = parseFloat(localStorage.getItem('cookiesPerSecond')) || 0.5;
     let cookiesPerClick = parseFloat(localStorage.getItem('cookiesPerClick')) || 1;
-    let username = ''; // New variable for username
+    let username = localStorage.getItem('username') || '';
 
-    function startGame() {
-        // Hide the username input and start button
-        document.getElementById('username-container').style.display = 'none';
-        
-        // Game starts here
-        // You can use the username in your game logic if needed
-        updateDisplay();
-        setInterval(function() {
-            updateScore(upgradesOwned * cookiesPerSecond / 10);
-        }, 100);
-    }
-
-    startGameButton.addEventListener('click', function() {
-        username = usernameInput.value.trim();
-        if (username.length > 0) {
-            startGame();
-        } else {
-            alert('Please enter a username to start the game.');
-        }
-    });
-    
-    
     function saveGame() {
         localStorage.setItem('score', score);
         localStorage.setItem('upgradesOwned', upgradesOwned);
@@ -49,12 +31,13 @@ document.addEventListener('DOMContentLoaded', function() {
         localStorage.setItem('multiplierCost', multiplierCost);
         localStorage.setItem('cookiesPerSecond', cookiesPerSecond);
         localStorage.setItem('cookiesPerClick', cookiesPerClick);
+        localStorage.setItem('username', username);
     }
 
     function updateScore(amount) {
         score += amount;
-        score = parseFloat(score.toFixed(1)); // Fixes floating-point precision issues
-        saveGame(); // Save game state after updating score
+        score = parseFloat(score.toFixed(1));
+        saveGame();
         updateDisplay();
     }
 
@@ -63,7 +46,6 @@ document.addEventListener('DOMContentLoaded', function() {
         upgradesOwnedDisplay.textContent = `Upgrades Owned: ${upgradesOwned}`;
         buyUpgradeButton.textContent = `Buy Upgrade (${upgradeCost} cookies)`;
         multipliersOwnedDisplay.textContent = `Multipliers Owned: ${multipliersOwned}`;
-        buyMultiplierButton.textContent = `Buy Multiplier (${multiplierCost} cookies)`;
         buyUpgradeButton.disabled = score < upgradeCost;
         buyMultiplierButton.disabled = score < multiplierCost;
     }
@@ -87,6 +69,32 @@ document.addEventListener('DOMContentLoaded', function() {
         setTimeout(() => gameContainer.removeChild(clickBonus), 1000);
     }
 
+    function startGame() {
+        usernameContainer.style.display = 'none';
+        gameContainer.style.display = 'block';
+        updateDisplay();
+        setInterval(function() {
+            updateScore(upgradesOwned * cookiesPerSecond / 10);
+        }, 100);
+    }
+
+    startGameButton.addEventListener('click', function() {
+        username = usernameInput.value.trim();
+        if (username.length > 0) {
+            startGame();
+        } else {
+            alert('Please enter a username to start the game.');
+        }
+    });
+
+    // If the user already has cookies or a username saved, start the game immediately
+    if (score > 0 || username) {
+        startGame();
+    } else {
+        // Show username input if no cookies or username is saved
+        usernameContainer.style.display = 'block';
+    }
+
     cookie.addEventListener('click', function(e) {
         updateScore(cookiesPerClick);
         showClickBonus(e);
@@ -96,9 +104,8 @@ document.addEventListener('DOMContentLoaded', function() {
         if (score >= upgradeCost) {
             updateScore(-upgradeCost);
             upgradesOwned++;
-            upgradeCost = Math.ceil(upgradeCost * 1.2); // Increase the cost by 20%
-            cookiesPerSecond += 0.5; // Increase the cookies per second
-            saveGame(); // Save game state after purchasing an upgrade
+            upgradeCost = Math.ceil(upgradeCost * 1.2);
+            cookiesPerSecond += 0.5;
             updateDisplay();
         }
     });
@@ -107,17 +114,9 @@ document.addEventListener('DOMContentLoaded', function() {
         if (score >= multiplierCost) {
             updateScore(-multiplierCost);
             multipliersOwned++;
-            multiplierCost = Math.ceil(multiplierCost * 1.2); // Increase the cost by 20%
-            cookiesPerClick = parseFloat((cookiesPerClick + 0.1).toFixed(1)); // Increase cookies per click
-            saveGame(); // Save game state after purchasing a multiplier
+            multiplierCost = Math.ceil(multiplierCost * 1.2);
+            cookiesPerClick = parseFloat((cookiesPerClick + 0.1).toFixed(1));
             updateDisplay();
         }
     });
-
-    setInterval(function() {
-        updateScore(upgradesOwned * cookiesPerSecond / 10); // Update 10 times per second for smoother increment
-    }, 100);
-
-    // Call updateDisplay at the start to reflect the loaded state
-    updateDisplay();
 });
