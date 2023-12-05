@@ -87,3 +87,27 @@ button:disabled {
     user-select: none; /* Prevents the text from being selectable */
     z-index: 1000;
 }
+
+#username-container {
+    margin-bottom: 20px;
+}
+
+#username-input {
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+}
+
+#start-game {
+    padding: 10px 20px;
+    margin-left: 10px;
+    border-radius: 4px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+#start-game:hover {
+    background-color: #45a049;
+}
