@@ -90,12 +90,14 @@ button:disabled {
 
 #username-container {
     margin-bottom: 20px;
+    text-align: center;
 }
 
 #username-input {
     padding: 8px;
     border-radius: 4px;
     border: 1px solid #ddd;
+    width: 60%;
 }
 
 #start-game {
