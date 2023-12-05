@@ -6,7 +6,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const upgradesOwnedDisplay = document.getElementById('upgrades-owned');
     const buyMultiplierButton = document.getElementById('buy-multiplier');
     const multipliersOwnedDisplay = document.getElementById('multipliers-owned');
-
+    const usernameInput = document.getElementById('username-input');
+    const startGameButton = document.getElementById('start-game');
+    
     // Load saved game state or set default values if none exist
     let score = parseFloat(localStorage.getItem('score')) || 0;
     let upgradesOwned = parseInt(localStorage.getItem('upgradesOwned'), 10) || 0;
@@ -15,7 +17,30 @@ document.addEventListener('DOMContentLoaded', function() {
     let multiplierCost = parseInt(localStorage.getItem('multiplierCost'), 10) || 20;
     let cookiesPerSecond = parseFloat(localStorage.getItem('cookiesPerSecond')) || 0.5;
     let cookiesPerClick = parseFloat(localStorage.getItem('cookiesPerClick')) || 1;
+    let username = ''; // New variable for username
 
+    function startGame() {
+        // Hide the username input and start button
+        document.getElementById('username-container').style.display = 'none';
+        
+        // Game starts here
+        // You can use the username in your game logic if needed
+        updateDisplay();
+        setInterval(function() {
+            updateScore(upgradesOwned * cookiesPerSecond / 10);
+        }, 100);
+    }
+
+    startGameButton.addEventListener('click', function() {
+        username = usernameInput.value.trim();
+        if (username.length > 0) {
+            startGame();
+        } else {
+            alert('Please enter a username to start the game.');
+        }
+    });
+    
+    
     function saveGame() {
         localStorage.setItem('score', score);
         localStorage.setItem('upgradesOwned', upgradesOwned);
