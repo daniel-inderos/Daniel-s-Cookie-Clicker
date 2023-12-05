@@ -1,0 +1,89 @@
+body {
+    background-color: #f7f1e3;
+    color: #333;
+    text-align: center;
+    font-family: 'Arial', sans-serif;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+#game-container {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: center;
+    width: 300px;
+    position: relative; /* Required for absolute positioning of children */
+}
+
+#cookie-container {
+    margin-bottom: 20px;
+}
+
+#cookie {
+    width: 200px;
+    cursor: pointer;
+    transition: transform 0.1s;
+}
+
+#cookie:hover {
+    transform: scale(1.1);
+}
+
+#score {
+    font-size: 24px;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+#upgrades-container,
+#multipliers-container {
+    border-top: 1px solid #eaeaea;
+    padding-top: 20px;
+    margin-top: 20px;
+}
+
+button {
+    background-color: #ffda79;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    display: block;
+    margin: 10px auto; /* Centers button */
+    width: 80%;
+}
+
+button:hover {
+    background-color: #ffc048;
+}
+
+button:disabled {
+    background-color: #ccc;
+    cursor: default;
+}
+
+#upgrades-owned,
+#multipliers-owned {
+    font-size: 16px;
+}
+
+.click-bonus {
+    position: absolute;
+    background-color: rgba(255, 255, 0, 0.8);
+    border-radius: 10px;
+    padding: 2px 5px;
+    color: #333;
+    font-size: 14px;
+    pointer-events: none; /* So it doesn't interfere with other clicks */
+    transition: top 0.8s ease-out, opacity 0.5s ease-out;
+    user-select: none; /* Prevents the text from being selectable */
+    z-index: 1000;
+}
