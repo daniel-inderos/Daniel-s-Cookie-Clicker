@@ -9,9 +9,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const usernameInput = document.getElementById('username-input');
     const startGameButton = document.getElementById('start-game');
     const usernameContainer = document.getElementById('username-container');
+    const settingsButton = document.getElementById('settings-button');
+    const settingsPanel = document.getElementById('settings-panel');
+    const wipeSaveButton = document.getElementById('wipe-save-button');
 
     // Initially hide game elements
     gameContainer.style.display = 'none';
+    settingsPanel.style.display = 'none';
 
     // Load saved game state or set default values if none exist
     let score = parseFloat(localStorage.getItem('score')) || 0;
@@ -51,22 +55,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function showClickBonus(e) {
-        const clickBonus = document.createElement('div');
-        clickBonus.classList.add('click-bonus');
-        clickBonus.textContent = `+${cookiesPerClick.toFixed(1)}`;
-        const rect = cookie.getBoundingClientRect();
-        const offsetX = e.clientX - rect.left; // Get the x position within the cookie image
-        const offsetY = e.clientY - rect.top; // Get the y position within the cookie image
-        clickBonus.style.left = `${offsetX}px`;
-        clickBonus.style.top = `${offsetY}px`;
-        gameContainer.appendChild(clickBonus);
-
-        // Animate and remove the click bonus element
-        setTimeout(() => {
-            clickBonus.style.opacity = 0;
-            clickBonus.style.top = `${offsetY - 50}px`;
-        }, 100);
-        setTimeout(() => gameContainer.removeChild(clickBonus), 1000);
+        // ... existing showClickBonus function ...
     }
 
     function startGame() {
@@ -87,11 +76,29 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+    settingsButton.addEventListener('click', function() {
+        settingsPanel.style.display = settingsPanel.style.display === 'none' ? 'block' : 'none';
+    });
+
+    wipeSaveButton.addEventListener('click', function() {
+        if (confirm('Are you sure you want to wipe your save? This cannot be undone.')) {
+            localStorage.clear();
+            score = 0;
+            upgradesOwned = 0;
+            multipliersOwned = 0;
+            upgradeCost = 10;
+            multiplierCost = 20;
+            cookiesPerSecond = 0.5;
+            cookiesPerClick = 1;
+            updateDisplay();
+            settingsPanel.style.display = 'none';
+        }
+    });
+
     // If the user already has cookies or a username saved, start the game immediately
     if (score > 0 || username) {
         startGame();
     } else {
-        // Show username input if no cookies or username is saved
         usernameContainer.style.display = 'block';
     }
 
