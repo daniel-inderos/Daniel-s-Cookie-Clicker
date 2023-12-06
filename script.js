@@ -54,30 +54,32 @@ document.addEventListener('DOMContentLoaded', function() {
         buyMultiplierButton.disabled = score < multiplierCost;
     }
 
-   // ... other parts of the script ...
+// ... other parts of the script ...
 
 function showClickBonus(e) {
     const clickBonus = document.createElement('div');
     clickBonus.classList.add('click-bonus');
     clickBonus.textContent = `+${cookiesPerClick.toFixed(1)}`;
     const rect = cookie.getBoundingClientRect();
-    const offsetX = e.clientX - rect.left - rect.width / 2; // Center it horizontally on the cookie
-    const offsetY = e.clientY - rect.top - rect.height / 2; // Center it vertically on the cookie
+    // Adjusted offsets for the bonus to appear where the cookie is clicked
+    const offsetX = e.clientX - rect.left;
+    const offsetY = e.clientY - rect.top;
     clickBonus.style.left = `${offsetX}px`;
     clickBonus.style.top = `${offsetY}px`;
-    document.body.appendChild(clickBonus); // Append to body to ensure it's not confined by parent divs
+    gameContainer.appendChild(clickBonus); // Ensure this is the right container for your setup
 
     // Animate and remove the click bonus element
     setTimeout(() => {
         clickBonus.style.opacity = 0;
-        clickBonus.style.top = `${offsetY - 50}px`;
+        clickBonus.style.transform = `translate(-50%, -50%) translateY(-50px)`; // Center and move up
     }, 100);
     setTimeout(() => {
-        if (document.body.contains(clickBonus)) {
-            document.body.removeChild(clickBonus);
-        }
+        clickBonus.remove(); // Modern method to remove the element
     }, 1000);
 }
+
+// ... other parts of the script ...
+
 
 // ... other parts of the script ...
 
