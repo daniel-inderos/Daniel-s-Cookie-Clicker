@@ -119,9 +119,12 @@ button:disabled {
 
 /* ... existing styles ... */
 
+/* ... existing styles ... */
+
 #settings-button {
-    padding: 5px 10px; /* Reduced padding */
-    font-size: 14px; /* Adjust font size as needed */
+    padding: 10px 15px; /* Adjust padding to affect width */
+    /* Or you can set a specific width instead of padding, like so: */
+    /* width: 100px; */
     background-color: #f8b400; /* Choose a color that fits the button on the screen */
     color: #fff;
     border: none;
@@ -136,6 +139,9 @@ button:disabled {
 #settings-button:hover {
     background-color: #cda300;
 }
+
+/* ... existing styles ... */
+
 
 /* ... existing styles ... */
 
