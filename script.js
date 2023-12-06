@@ -55,8 +55,31 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function showClickBonus(e) {
-        // ... existing showClickBonus function ...
-    }
+    const clickBonus = document.createElement('div');
+    clickBonus.classList.add('click-bonus');
+    clickBonus.textContent = `+${cookiesPerClick.toFixed(1)}`;
+    const rect = cookie.getBoundingClientRect();
+    const offsetX = e.clientX - rect.left - window.scrollX; // Adjust for scrolling
+    const offsetY = e.clientY - rect.top - window.scrollY; // Adjust for scrolling
+    clickBonus.style.left = `${offsetX}px`;
+    clickBonus.style.top = `${offsetY}px`;
+    document.body.appendChild(clickBonus); // Append to body to ensure it's not restricted by parent divs
+
+    // Animate and remove the click bonus element
+    setTimeout(() => {
+        clickBonus.style.opacity = 0;
+        clickBonus.style.transform = 'translateY(-50px)'; // Move up
+    }, 100);
+    setTimeout(() => {
+        document.body.removeChild(clickBonus);
+    }, 1000);
+}
+
+cookie.addEventListener('click', function(e) {
+    updateScore(cookiesPerClick);
+    showClickBonus(e); // Make sure this is called here
+});
+
 
     function startGame() {
         usernameContainer.style.display = 'none';
