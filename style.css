@@ -133,18 +133,41 @@ button:disabled {
 }
 
 /* Settings Panel Style */
-#settings-panel {
-    position: fixed; /* Use fixed for a consistent overlay position */
-    top: 60px; /* Adjust so it appears below the settings button */
-    right: 20px;
-    width: 250px; /* Adjust width as needed */
-    background-color: #f3f3f3; /* Light background */
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    padding: 10px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-    z-index: 99; /* Just below the settings button */
+/* ... existing styles ... */
+
+#settings-button {
+    padding: 10px 20px;
+    background-color: #f8b400; /* Choose a color that fits the button on the screen */
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 20px; /* Adjust as needed */
+    position: absolute;
+    top: 20px; /* Adjust as needed */
+    right: 20px; /* Adjust as needed */
 }
+
+#settings-button:hover {
+    background-color: #cda300;
+}
+
+#settings-panel {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    position: absolute;
+    top: 60px; /* Adjust as needed to place below the settings button */
+    right: 20px;
+    width: 250px; /* Adjust as needed */
+    display: none; /* Initially hidden */
+    z-index: 100; /* Ensure it's on top of other elements */
+}
+
+/* Add styles for wipe-save-button if necessary */
+
 
 #wipe-save-button {
     /* Same style as other buttons for consistency */
