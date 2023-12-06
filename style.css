@@ -1,4 +1,4 @@
-body {
+xftbody {
     background-color: #f7f1e3;
     color: #333;
     text-align: center;
@@ -75,18 +75,18 @@ button:disabled {
     font-size: 16px;
 }
 
+/* ... existing styles ... */
+
 .click-bonus {
     position: absolute;
-    background-color: rgba(255, 255, 0, 0.8);
-    border-radius: 10px;
-    padding: 2px 5px;
-    color: #333;
-    font-size: 14px;
-    pointer-events: none; /* So it doesn't interfere with other clicks */
-    transition: top 0.8s ease-out, opacity 0.5s ease-out;
-    user-select: none; /* Prevents the text from being selectable */
-    z-index: 1000;
+    pointer-events: none;
+    user-select: none;
+    z-index: 1000; // High z-index to keep it above other elements
+    transition: transform 0.8s ease-out, opacity 0.8s ease-out;
 }
+
+/* ... existing styles ... */
+
 
 #username-container {
     margin-bottom: 20px;
