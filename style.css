@@ -114,34 +114,28 @@ button:disabled {
     background-color: #45a049;
 }
 
-/* Settings Button Style */
-/* ... existing styles ... */
-
-/* ... existing styles ... */
-
 /* ... existing styles ... */
 
 #settings-button {
-    padding: 10px 15px; /* Adjust padding to affect width */
-    /* Or you can set a specific width instead of padding, like so: */
-    /* width: 100px; */
-    background-color: #f8b400; /* Choose a color that fits the button on the screen */
+    padding: 10px 10px; /* Reduced padding on the sides */
+    width: auto; /* Auto width to fit content */
+    min-width: 100px; /* Minimum width to ensure it's not too small */
+    max-width: 150px; /* Maximum width to control the size */
+    background-color: #f8b400; /* or any other color you prefer */
     color: #fff;
     border: none;
     border-radius: 4px;
     cursor: pointer;
     position: absolute;
-    top: 10px; /* Adjust as needed */
-    right: 10px; /* Adjust as needed */
-    z-index: 100; /* Ensure it's on top of other elements */
+    top: 20px; /* Adjust as needed */
+    right: 20px; /* Adjust as needed */
+    z-index: 100;
+    text-align: center; /* Ensure the text is centered */
 }
 
 #settings-button:hover {
     background-color: #cda300;
 }
-
-/* ... existing styles ... */
-
 
 /* ... existing styles ... */
 
