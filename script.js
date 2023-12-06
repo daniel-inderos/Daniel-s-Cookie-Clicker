@@ -159,3 +159,36 @@ cookie.addEventListener('click', function(e) {
         }
     });
 });
+
+// Add to the bottom of your existing script.js file
+window.addEventListener('beforeunload', function() {
+    const timestamp = Date.now();
+    localStorage.setItem('lastCloseTime', timestamp);
+    saveGame();
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    // ... existing game initialization code ...
+
+    // Calculate offline progress
+    const lastCloseTime = parseInt(localStorage.getItem('lastCloseTime'), 10);
+    const currentTime = Date.now();
+    const timePassed = (currentTime - lastCloseTime) / 1000; // Time passed in seconds
+    let offlineCookies = 0;
+
+    if (lastCloseTime && timePassed > 0) {
+        offlineCookies = timePassed * cookiesPerSecond * upgradesOwned;
+        score += offlineCookies; // Add offline cookies to the total score
+    }
+
+    // Notify player of offline cookies earned
+    if (offlineCookies > 0) {
+        alert(`Welcome back! You've earned ${offlineCookies.toFixed(1)} cookies while you were away.`);
+    }
+
+    // ... the rest of your game's initialization code ...
+
+    // Don't forget to call updateDisplay() to refresh the score display
+    updateDisplay();
+});
+
