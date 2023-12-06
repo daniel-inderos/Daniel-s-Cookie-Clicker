@@ -117,47 +117,28 @@ button:disabled {
 /* Settings Button Style */
 /* ... existing styles ... */
 
+/* ... existing styles ... */
+
 #settings-button {
     padding: 5px 10px; /* Reduced padding */
-    font-size: 14px; /* Smaller font size if needed */
-    background-color: #f8b400; /* Or any color you prefer */
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    position: absolute;
-    top: 20px; /* Adjust if needed */
-    right: 20px; /* Adjust if needed */
-    z-index: 100; /* Make sure it's above other elements */
-}
-
-#settings-button:hover {
-    background-color: #cda300;
-}
-
-/* ... existing styles ... */
-
-
-/* Settings Panel Style */
-/* ... existing styles ... */
-
-#settings-button {
-    padding: 10px 20px;
+    font-size: 14px; /* Adjust font size as needed */
     background-color: #f8b400; /* Choose a color that fits the button on the screen */
     color: #fff;
     border: none;
-    border-radius: 5px;
+    border-radius: 4px;
     cursor: pointer;
-    font-size: 16px;
-    margin-top: 20px; /* Adjust as needed */
     position: absolute;
-    top: 20px; /* Adjust as needed */
-    right: 20px; /* Adjust as needed */
+    top: 10px; /* Adjust as needed */
+    right: 10px; /* Adjust as needed */
+    z-index: 100; /* Ensure it's on top of other elements */
 }
 
 #settings-button:hover {
     background-color: #cda300;
 }
+
+/* ... existing styles ... */
+
 
 #settings-panel {
     background-color: #fff;
