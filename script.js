@@ -87,14 +87,6 @@ function showClickBonus(e) {
 cookie.addEventListener('click', function(e) {
     updateScore(cookiesPerClick);
     showClickBonus(e); // Make sure this is called here
-
-    function showClickBonus(e) {
-    const clickBonus = document.createElement('div');
-    clickBonus.classList.add('click-bonus');
-    clickBonus.textContent = `+${cookiesPerClick.toFixed(1)}`;
-
-         showClickBonus(e); // Call the function with the click event object as argument
-  }
 });
 
 
@@ -178,73 +170,24 @@ window.addEventListener('beforeunload', function() {
 document.addEventListener('DOMContentLoaded', function() {
     // ... existing game initialization code ...
 
-  const lastCloseTime = parseInt(localStorage.getItem('lastCloseTime'), 10);
-const currentTime = Date.now();
-const timePassed = (currentTime - lastCloseTime) / 1000; // Time passed in seconds
-let offlineCookies = 0;
+    // Calculate offline progress
+    const lastCloseTime = parseInt(localStorage.getItem('lastCloseTime'), 10);
+    const currentTime = Date.now();
+    const timePassed = (currentTime - lastCloseTime) / 1000; // Time passed in seconds
+    let offlineCookies = 0;
 
-if (lastCloseTime && timePassed > 0) {
-  offlineCookies = timePassed * cookiesPerSecond * upgradesOwned;
-  score += offlineCookies;
+    if (lastCloseTime && timePassed > 0) {
+        offlineCookies = timePassed * cookiesPerSecond * upgradesOwned;
+        score += offlineCookies; // Add offline cookies to the total score
+    }
 
-  // Show the offline cookies notification
-  showOfflineCookiesNotification(offlineCookies);
-}
+    // Notify player of offline cookies earned
+    if (offlineCookies > 0) {
+        alert(`Welcome back! You've earned ${offlineCookies.toFixed(1)} cookies while you were away.`);
+    }
 
-
-    
+    // ... the rest of your game's initialization code ...
 
     // Don't forget to call updateDisplay() to refresh the score display
     updateDisplay();
 });
-
-function showOfflineCookiesNotification(offlineCookies) {
-  // Create a notification element
-  const notificationElement = document.createElement('div');
-  notificationElement.classList.add('offline-cookies-notification');
-
-  // Add content to the notification
-  notificationElement.textContent = `You earned ${offlineCookies.toFixed(1)} cookies while you were away!`;
-
-  // Add the notification element to the DOM
-  document.body.appendChild(notificationElement);
-
-  // Animate the notification and remove it after a certain time
-  notificationElement.classList.add('show');
-  setTimeout(() => {
-    notificationElement.classList.remove('show');
-    setTimeout(() => {
-      notificationElement.remove();
-    }, 500);
-  }, 3000);
-}
-
-// Styles for the offline cookies notification
-.offline-cookies-notification {
-  background-color: #2ECC71; /* Green color */
-  border: 1px solid #27AE60; /* Darker green border */
-  border-radius: 5px;
-  padding: 15px;
-  position: fixed;
-  top: 30px;
-  right: 30px;
-  font-size: 18px;
-  color: white; /* White text */
-  text-align: center;
-  z-index: 10000; /* Ensure notification appears on top */
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); /* Subtle shadow */
-  animation: slideInDown 0.3s ease-in-out;
-}
-
-@keyframes slideInDown {
-  from {
-    transform: translateY(-100%); /* Start off-screen */
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0); /* Slide down to visible position */
-    opacity: 1;
-  }
-}
-
-
