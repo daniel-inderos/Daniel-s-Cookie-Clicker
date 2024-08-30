@@ -59,10 +59,26 @@ button {
     display: block;
     margin: 10px auto; /* Centers button */
     width: 80%;
+    position: relative;
 }
 
 button:hover {
     background-color: #ffc048;
+}
+
+button:hover::after {
+    content: attr(title);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    z-index: 1;
 }
 
 button:disabled {
@@ -81,7 +97,7 @@ button:disabled {
     position: absolute;
     pointer-events: none;
     user-select: none;
-    z-index: 1000; // High z-index to keep it above other elements
+    z-index: 1000; /* High z-index to keep it above other elements */
     transition: transform 0.8s ease-out, opacity 0.8s ease-out;
 }
 
@@ -171,4 +187,41 @@ button:disabled {
 
 #wipe-save-button:hover {
     background-color: #d32f2f;
+}
+
+/* ... existing styles ... */
+
+#stats-panel {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #666;
+}
+
+/* Remove this style if it exists */
+/*
+#click-upgrades-container {
+    margin-top: 20px;
+}
+*/
+
+.purchase-effect {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 24px;
+    font-weight: bold;
+    color: #4CAF50;
+    opacity: 1;
+    transition: all 0.5s ease;
+    pointer-events: none;
+}
+
+/* ... rest of the existing styles ... */
+
+.upgrade-description,
+.multiplier-description {
+    font-size: 12px;
+    color: #666;
+    margin-top: 5px;
 }

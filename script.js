@@ -26,6 +26,8 @@ document.addEventListener('DOMContentLoaded', function() {
     let cookiesPerSecond = parseFloat(localStorage.getItem('cookiesPerSecond')) || 0.5;
     let cookiesPerClick = parseFloat(localStorage.getItem('cookiesPerClick')) || 1;
     let username = localStorage.getItem('username') || '';
+    let achievements = JSON.parse(localStorage.getItem('achievements')) || {};
+    let totalCookiesEarned = parseFloat(localStorage.getItem('totalCookiesEarned')) || 0;
 
     function saveGame() {
         localStorage.setItem('score', score);
@@ -36,59 +38,67 @@ document.addEventListener('DOMContentLoaded', function() {
         localStorage.setItem('cookiesPerSecond', cookiesPerSecond);
         localStorage.setItem('cookiesPerClick', cookiesPerClick);
         localStorage.setItem('username', username);
+        localStorage.setItem('achievements', JSON.stringify(achievements));
+        localStorage.setItem('totalCookiesEarned', totalCookiesEarned);
     }
 
     function updateScore(amount) {
         score += amount;
+        totalCookiesEarned += amount;
         score = parseFloat(score.toFixed(1));
+        totalCookiesEarned = parseFloat(totalCookiesEarned.toFixed(1));
         saveGame();
         updateDisplay();
+        checkAchievements();
     }
 
     function updateDisplay() {
-        scoreDisplay.textContent = `Cookies: ${score}`;
+        scoreDisplay.textContent = `Cookies: ${score.toFixed(1)}`;
         upgradesOwnedDisplay.textContent = `Upgrades Owned: ${upgradesOwned}`;
         buyUpgradeButton.textContent = `Buy Upgrade (${upgradeCost} cookies)`;
+        buyUpgradeButton.title = `Increases cookies per second by 0.5`;
         multipliersOwnedDisplay.textContent = `Multipliers Owned: ${multipliersOwned}`;
+        buyMultiplierButton.textContent = `Buy Multiplier (${multiplierCost} cookies)`;
+        buyMultiplierButton.title = `Increases cookies per click by 0.1`;
         buyUpgradeButton.disabled = score < upgradeCost;
         buyMultiplierButton.disabled = score < multiplierCost;
+        document.getElementById('total-cookies').textContent = `Total Cookies Baked: ${totalCookiesEarned.toFixed(1)}`;
+        document.getElementById('cookies-per-second').textContent = `Cookies per Second: ${(upgradesOwned * cookiesPerSecond).toFixed(1)}`;
+        document.getElementById('cookies-per-click').textContent = `Cookies per Click: ${cookiesPerClick.toFixed(1)}`;
     }
 
-// ... other parts of the script ...
+    function checkAchievements() {
+        const milestones = [100, 1000, 10000, 100000, 1000000];
+        milestones.forEach(milestone => {
+            if (totalCookiesEarned >= milestone && !achievements[`cookies${milestone}`]) {
+                achievements[`cookies${milestone}`] = true;
+                alert(`Achievement unlocked: Baked ${milestone} cookies!`);
+                saveGame();
+            }
+        });
+    }
 
-function showClickBonus(e) {
-    const clickBonus = document.createElement('div');
-    clickBonus.classList.add('click-bonus');
-    clickBonus.textContent = `+${cookiesPerClick.toFixed(1)}`;
-    const rect = cookie.getBoundingClientRect();
-    // Adjusted offsets for the bonus to appear where the cookie is clicked
-    const offsetX = e.clientX - rect.left;
-    const offsetY = e.clientY - rect.top;
-    clickBonus.style.left = `${offsetX}px`;
-    clickBonus.style.top = `${offsetY}px`;
-    gameContainer.appendChild(clickBonus); // Ensure this is the right container for your setup
+    function showClickBonus(e) {
+        const clickBonus = document.createElement('div');
+        clickBonus.classList.add('click-bonus');
+        clickBonus.textContent = `+${cookiesPerClick.toFixed(1)}`;
+        const rect = cookie.getBoundingClientRect();
+        // Adjusted offsets for the bonus to appear where the cookie is clicked
+        const offsetX = e.clientX - rect.left;
+        const offsetY = e.clientY - rect.top;
+        clickBonus.style.left = `${offsetX}px`;
+        clickBonus.style.top = `${offsetY}px`;
+        gameContainer.appendChild(clickBonus); // Ensure this is the right container for your setup
 
-    // Animate and remove the click bonus element
-    setTimeout(() => {
-        clickBonus.style.opacity = 0;
-        clickBonus.style.transform = `translate(-50%, -50%) translateY(-50px)`; // Center and move up
-    }, 100);
-    setTimeout(() => {
-        clickBonus.remove(); // Modern method to remove the element
-    }, 1000);
-}
-
-// ... other parts of the script ...
-
-
-// ... other parts of the script ...
-
-
-cookie.addEventListener('click', function(e) {
-    updateScore(cookiesPerClick);
-    showClickBonus(e); // Make sure this is called here
-});
-
+        // Animate and remove the click bonus element
+        setTimeout(() => {
+            clickBonus.style.opacity = 0;
+            clickBonus.style.transform = `translate(-50%, -50%) translateY(-50px)`; // Center and move up
+        }, 100);
+        setTimeout(() => {
+            clickBonus.remove(); // Modern method to remove the element
+        }, 1000);
+    }
 
     function startGame() {
         usernameContainer.style.display = 'none';
@@ -122,6 +132,8 @@ cookie.addEventListener('click', function(e) {
             multiplierCost = 20;
             cookiesPerSecond = 0.5;
             cookiesPerClick = 1;
+            achievements = {};
+            totalCookiesEarned = 0;
             updateDisplay();
             settingsPanel.style.display = 'none';
         }
@@ -146,6 +158,7 @@ cookie.addEventListener('click', function(e) {
             upgradeCost = Math.ceil(upgradeCost * 1.2);
             cookiesPerSecond += 0.5;
             updateDisplay();
+            showPurchaseAnimation();
         }
     });
 
@@ -156,38 +169,51 @@ cookie.addEventListener('click', function(e) {
             multiplierCost = Math.ceil(multiplierCost * 1.2);
             cookiesPerClick = parseFloat((cookiesPerClick + 0.1).toFixed(1));
             updateDisplay();
+            showPurchaseAnimation();
         }
     });
-});
 
-// Add to the bottom of your existing script.js file
-window.addEventListener('beforeunload', function() {
-    const timestamp = Date.now();
-    localStorage.setItem('lastCloseTime', timestamp);
-    saveGame();
-});
+    function showPurchaseAnimation() {
+        const purchaseEffect = document.createElement('div');
+        purchaseEffect.classList.add('purchase-effect');
+        purchaseEffect.textContent = 'Upgrade!';
+        gameContainer.appendChild(purchaseEffect);
 
-document.addEventListener('DOMContentLoaded', function() {
-    // ... existing game initialization code ...
+        setTimeout(() => {
+            purchaseEffect.style.opacity = '0';
+            purchaseEffect.style.transform = 'translateY(-50px)';
+        }, 50);
 
-    // Calculate offline progress
-    const lastCloseTime = parseInt(localStorage.getItem('lastCloseTime'), 10);
-    const currentTime = Date.now();
-    const timePassed = (currentTime - lastCloseTime) / 1000; // Time passed in seconds
-    let offlineCookies = 0;
-
-    if (lastCloseTime && timePassed > 0) {
-        offlineCookies = timePassed * cookiesPerSecond * upgradesOwned;
-        score += offlineCookies; // Add offline cookies to the total score
+        setTimeout(() => {
+            purchaseEffect.remove();
+        }, 500);
     }
 
-    // Notify player of offline cookies earned
-    if (offlineCookies > 0) {
-        alert(`Welcome back! You've earned ${offlineCookies.toFixed(1)} cookies while you were away.`);
-    }
+    document.addEventListener('DOMContentLoaded', function() {
+        // Calculate offline progress
+        const lastCloseTime = parseInt(localStorage.getItem('lastCloseTime'), 10);
+        const currentTime = Date.now();
+        const timePassed = (currentTime - lastCloseTime) / 1000; // Time passed in seconds
+        let offlineCookies = 0;
 
-    // ... the rest of your game's initialization code ...
+        if (lastCloseTime && timePassed > 0) {
+            offlineCookies = timePassed * cookiesPerSecond * upgradesOwned;
+            score += offlineCookies;
+            totalCookiesEarned += offlineCookies;
+        }
 
-    // Don't forget to call updateDisplay() to refresh the score display
-    updateDisplay();
+        // Notify player of offline cookies earned
+        if (offlineCookies > 0) {
+            alert(`Welcome back! You've earned ${offlineCookies.toFixed(1)} cookies while you were away.`);
+        }
+
+        updateDisplay();
+        checkAchievements();
+    });
+
+    window.addEventListener('beforeunload', function() {
+        const timestamp = Date.now();
+        localStorage.setItem('lastCloseTime', timestamp);
+        saveGame();
+    });
 });
