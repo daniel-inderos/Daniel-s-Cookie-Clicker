@@ -103,10 +103,35 @@ document.addEventListener('DOMContentLoaded', function() {
     function startGame() {
         usernameContainer.style.display = 'none';
         gameContainer.style.display = 'block';
+        
+        const offlineCookies = calculateOfflineProgress();
+        if (offlineCookies > 0) {
+            alert(`Welcome back! You've earned ${offlineCookies.toFixed(1)} cookies while you were away.`);
+        }
+        
         updateDisplay();
+        
+        // Start the cookie generation interval
         setInterval(function() {
-            updateScore(upgradesOwned * cookiesPerSecond / 10);
+            const cookiesGenerated = (upgradesOwned * cookiesPerSecond) / 10;
+            updateScore(cookiesGenerated);
         }, 100);
+    }
+
+    function calculateOfflineProgress() {
+        const lastCloseTime = parseInt(localStorage.getItem('lastCloseTime'), 10);
+        const currentTime = Date.now();
+        const timePassed = (currentTime - lastCloseTime) / 1000; // Time passed in seconds
+        let offlineCookies = 0;
+
+        if (lastCloseTime && timePassed > 0) {
+            const cookiesPerSecondTotal = upgradesOwned * cookiesPerSecond;
+            offlineCookies = timePassed * cookiesPerSecondTotal;
+            score += offlineCookies;
+            totalCookiesEarned += offlineCookies;
+        }
+
+        return offlineCookies;
     }
 
     startGameButton.addEventListener('click', function() {
